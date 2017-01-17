@@ -1,5 +1,5 @@
 AUTOMAKE_OPTIONS = foreign
-SUBDIRS = src
+SUBDIRS = src tools
 EXTRA_DIST = doxygen/libklbars.doxyconf doxygen/include
 
 docs:
