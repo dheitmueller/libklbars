@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include "libklbars/klbars.h"
 #include "font8x8_basic.h"
 
@@ -16,15 +17,27 @@
 
 typedef unsigned char u8;
 
-int kl_colorbar_init(struct kl_colorbar_context *ctx, unsigned char *buf, unsigned int width,
-		     unsigned int height)
+int kl_colorbar_init(struct kl_colorbar_context *ctx, unsigned int width,
+		     unsigned int height, int bitDepth)
 {
 	memset(ctx, 0, sizeof(*ctx));
     
 	ctx->plotwidth = 8 * 4; /* The 8bit char is rendered as 32x32 */
 	ctx->plotheight = ctx->plotwidth;
 	ctx->plotctrl = 8;
-	ctx->frame = buf;
+
+	ctx->colorspace = bitDepth;
+	if (bitDepth == KL_COLORBAR_8BIT)
+	  ctx->frame = malloc(height * width * 2);
+	else if (bitDepth == KL_COLORBAR_10BIT) {
+	  /* We internally use 16-bit integers for internal frame
+	     representation (makes blending easier) */
+	  ctx->frame = malloc(height * width * sizeof(uint16_t) * 2);
+	} else {
+	  // Unknown color depth
+	  return -1;
+	}
+
 	ctx->width = width;
 	ctx->height = height;
 	ctx->stride = width * 2;
@@ -35,6 +48,43 @@ int kl_colorbar_init(struct kl_colorbar_context *ctx, unsigned char *buf, unsign
 	return 0;
 }
 
+int kl_colorbar_finalize(struct kl_colorbar_context *ctx, unsigned char *buf,
+			 unsigned int byteStride)
+{
+	int y;
+	if (ctx->colorspace == KL_COLORBAR_8BIT) {
+		for (y = 0; y < ctx->height; y++) {
+			memcpy(buf, ctx->frame + (y * ctx->width * 2), ctx->width * 2);
+			buf += byteStride;
+		}
+	} else {
+		/* For now just handle the colorspace in 8-bit, and colorspace convert
+		   it to 10-bit on finalize */
+		for (y = 0; y < ctx->height; y++) {
+			/* Note, we're simultaneously converting 8-bit to 10-bit *AND*
+			   repacking to 10-bit in the same operation, which is why this
+			   is pretty convoluted */
+
+			/* FIXME:  this just begs for some SSE optimization */
+			unsigned char *line = ctx->frame + (y * ctx->width * 2);
+			int n = 0;
+			for (int x = 0; x < ctx->width * 2; x+= 3) {
+				buf[n] = line[x] << 2;
+				buf[n+1] = (line[x] >> 6) | (line[x+1] << 4);
+				buf[n+2] = (line[x+1] >> 4) | (line [x+2] << 6);
+				buf[n+3] = (line[x+2] >> 2);
+				n += 4;
+			}
+			buf += byteStride;
+		}
+	}
+	return 0;
+}
+
+void kl_colorbar_free(struct kl_colorbar_context *ctx)
+{
+	free(ctx->frame);
+}
 
 // SD 75% Colour Bars
 static uint32_t gSD75pcColourBars[8] =
