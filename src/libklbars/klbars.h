@@ -49,6 +49,13 @@ int kl_colorbar_render_string(struct kl_colorbar_context *ctx, unsigned char *s,
 void kl_colorbar_fill_colorbars (struct kl_colorbar_context *ctx);
 void kl_colorbar_fill_black (struct kl_colorbar_context *ctx);
 
+/* Generate an audio tone which can be pushed out on a PCM channel */
+int kl_colorbar_tonegenerator(int toneFreqHz, int sampleSize,
+			      int channelCount, int durationUs,
+			      int sampleRate, int signedSample,
+			      char *buf, size_t maxBufLen,
+			      size_t *resultBufLen);
+
 #ifdef __cplusplus
 };
 #endif
