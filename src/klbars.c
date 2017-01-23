@@ -106,6 +106,8 @@ void kl_colorbar_fill_colorbars(struct kl_colorbar_context *ctx)
 	uint32_t *nextWord = (uint32_t *) ctx->frame;
 	uint32_t *bars;
 	uint32_t y = 0;
+	uint32_t rowStride = ctx->width * 2;
+	uint8_t *rowPtr;
 
 	if (ctx->width > 720)
 		bars = gHD75pcColourBars;
@@ -113,38 +115,50 @@ void kl_colorbar_fill_colorbars(struct kl_colorbar_context *ctx)
 		bars = gSD75pcColourBars;
 
 	/* Vertical color bars for top 75% of field */
-	for (y = 0; y < (ctx->height * 3 / 4); y++)
-	{
-		for (uint32_t x = 0; x < ctx->width; x+=2)
-			*(nextWord++) = bars[(x * 7) / ctx->width];
+	for (uint32_t x = 0; x < ctx->width; x+=2)
+		*(nextWord++) = bars[(x * 7) / ctx->width];
+
+	rowPtr = ctx->frame + rowStride * y;
+	for (y = 1; y < (ctx->height * 3 / 4); y++) {
+		memcpy(rowPtr, ctx->frame, rowStride);
+		rowPtr += rowStride;
 	}
 
+	/* Generate the first row for the last 25% */
+	uint32_t *bottom = (uint32_t *)(ctx->frame + rowStride * y);
+	nextWord = bottom;
+	uint32_t x = 0;
+	int b_width = ((ctx->width / 7) * 5 / 4);
+	/* -I */
+	while (x < b_width) {
+		*(nextWord++) = 0x105f109e;
+		x += 2;
+	}
+
+	/* White */
+	while (x < b_width * 2) {
+		*(nextWord++) = 0xff80ff80;
+		x += 2;
+	}
+
+	/* -Q */
+	while (x < b_width * 3) {
+		*(nextWord++) = 0x109410af;
+		x += 2;
+	}
+
+	/* Black */
+	while (x < ctx->width) {
+		*(nextWord++) = 0x00800080;
+		x += 2;
+	}
+	y++;
+
+	/* Now fill the rest of the rows for the last 25% */
+	rowPtr = ctx->frame + rowStride * y;
 	while (y < ctx->height) {
-		uint32_t x = 0;
-		int b_width = ((ctx->width / 7) * 5 / 4);
-		/* -I */
-		while (x < b_width) {
-			*(nextWord++) = 0x105f109e;
-			x += 2;
-		}
-
-		/* White */
-		while (x < b_width * 2) {
-			*(nextWord++) = 0xff80ff80;
-			x += 2;
-		}
-
-		/* -Q */
-		while (x < b_width * 3) {
-			*(nextWord++) = 0x109410af;
-			x += 2;
-		}
-
-		/* Black */
-		while (x < ctx->width) {
-			*(nextWord++) = 0x00800080;
-			x += 2;
-		}
+		memcpy(rowPtr, bottom, rowStride);
+		rowPtr += rowStride;
 		y++;
 	}
 }
