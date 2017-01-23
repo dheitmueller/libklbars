@@ -21,30 +21,17 @@ int kl_colorbar_init(struct kl_colorbar_context *ctx, unsigned int width,
 		     unsigned int height, int bitDepth)
 {
 	memset(ctx, 0, sizeof(*ctx));
-    
-	ctx->plotwidth = 8 * 4; /* The 8bit char is rendered as 32x32 */
-	ctx->plotheight = ctx->plotwidth;
-	ctx->plotctrl = 8;
-
-	ctx->colorspace = bitDepth;
-	if (bitDepth == KL_COLORBAR_8BIT)
-	  ctx->frame = malloc(height * width * 2);
-	else if (bitDepth == KL_COLORBAR_10BIT) {
-	  /* We internally use 16-bit integers for internal frame
-	     representation (makes blending easier) */
-	  ctx->frame = malloc(height * width * sizeof(uint16_t) * 2);
-	} else {
-	  // Unknown color depth
-	  return -1;
-	}
 
 	ctx->width = width;
 	ctx->height = height;
 	ctx->stride = width * 2;
+	ctx->colorspace = bitDepth;
+	ctx->frame = malloc(height * ctx->stride);
+	if (ctx->frame == NULL)
+		return -1;
 
-	ctx->currx = 0;
-	ctx->curry = 0;
-    
+	kl_colorbar_render_reset(ctx);
+
 	return 0;
 }
 
@@ -271,34 +258,9 @@ int kl_colorbar_render_string(struct kl_colorbar_context *ctx, u8 *s, int len, i
 	return 0;
 }
 
-int kl_colorbar_render_reset(struct kl_colorbar_context *ctx, u8 *ptr, long width)
+int kl_colorbar_render_reset(struct kl_colorbar_context *ctx)
 {
-	if (!ptr)
-		return -1;
-    
-	switch (ctx->width) {
-        case 640:
-        case 800:
-        case 720:
-        case 768:
-        case 1024:
-        case 1280:
-        case 1400:
-        case 1440:
-        case 1600:
-        case 1680:
-        case 1920:
-        case 2048: /* Black Magic Extreme 3D 2K formats */
-		break;
-        default:
-		printf("%s() illegal stride %d\n", __func__, ctx->width);
-		return -1;
-	}
-    
-	ctx->ptr = ptr;
-	ctx->frame = ptr;
-	ctx->width = width;
-	ctx->stride = ctx->width * 2;
+	ctx->ptr = ctx->frame;
 
 	if (ctx->width < 1280) {
 		ctx->plotwidth = 8 * 2;
@@ -309,9 +271,8 @@ int kl_colorbar_render_reset(struct kl_colorbar_context *ctx, u8 *ptr, long widt
 		ctx->plotheight = 8 * 4;
 		ctx->plotctrl = 8;
 	}
-    
+
 	kl_colorbar_render_moveto(ctx, 0, 0);
-    
+
 	return 0;
 }
-
