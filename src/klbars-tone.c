@@ -42,28 +42,31 @@
 
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 #include <math.h>
+#include "libklbars/klbars.h"
 
-int kl_colorbar_tonegenerator(int toneFreqHz, int sampleSize,
+int kl_colorbar_tonegenerator(struct kl_colorbar_audio_context *audio_ctx,
+                              int toneFreqHz, int sampleSize,
 			      int channelCount, int durationUs,
-			      int sampleRate, int signedSample,
-			      char *buf, size_t maxBufLen,
-			      size_t *resultBufLen)
+                              int sampleRate, int signedSample)
 {
 	const int channelBytes = sampleSize / 8;
 
+	memset(audio_ctx, 0, sizeof(struct kl_colorbar_audio_context));
+
 	int64_t length = (int64_t) sampleRate * (int64_t) channelCount * (sampleSize / 8)
-		* (int64_t) durationUs / 100000;
-	*resultBufLen = length;
+		* (int64_t) durationUs / 1000000;
 
-	if (length > maxBufLen) {
+	audio_ctx->audio_data_size = length;
+	audio_ctx->audio_data = malloc(length);
+	if (audio_ctx->audio_data == NULL)
 		return -1;
-	}
 
-	unsigned char *ptr = (unsigned char *) buf;
+	unsigned char *ptr = audio_ctx->audio_data;
 	int sampleIndex = 0;
 
-	while (length) {
+	while (length >= channelBytes) {
 		double x = sin(2 * M_PI * toneFreqHz * (double)(sampleIndex % sampleRate) / sampleRate);
 		for (int i=0; i < channelCount; ++i) {
 			if (sampleSize == 8 && !signedSample) {
@@ -88,4 +91,22 @@ int kl_colorbar_tonegenerator(int toneFreqHz, int sampleSize,
 		++sampleIndex;
 	}
 	return 0;
+}
+
+void kl_colorbar_tonegenerator_extract(struct kl_colorbar_audio_context *audio_ctx,
+                                       unsigned char *buf, size_t bufSize)
+{
+	size_t c1_size, c2_size;
+
+	if (audio_ctx->currentLocation + bufSize < audio_ctx->audio_data_size) {
+		memcpy(buf, audio_ctx->audio_data + audio_ctx->currentLocation, bufSize);
+		audio_ctx->currentLocation += bufSize;
+	} else {
+		c1_size = audio_ctx->audio_data_size - audio_ctx->currentLocation;
+		c2_size = bufSize - (audio_ctx->audio_data_size - audio_ctx->currentLocation);
+
+		memcpy(buf, audio_ctx->audio_data + audio_ctx->currentLocation, c1_size);
+		memcpy(buf + c1_size, audio_ctx->audio_data, c2_size);
+		audio_ctx->currentLocation = c2_size;
+	}
 }

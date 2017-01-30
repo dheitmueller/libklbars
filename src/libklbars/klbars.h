@@ -31,6 +31,13 @@ struct kl_colorbar_context
     unsigned char bg[2], fg[2];
 };
 
+struct kl_colorbar_audio_context
+{
+	unsigned char *audio_data;
+	size_t audio_data_size;
+	size_t currentLocation;
+};
+
 /* Initialize a colorbar context */
 int kl_colorbar_init(struct kl_colorbar_context *ctx, unsigned int width,
 		     unsigned int height, int bitDepth);
@@ -50,11 +57,13 @@ void kl_colorbar_fill_colorbars (struct kl_colorbar_context *ctx);
 void kl_colorbar_fill_black (struct kl_colorbar_context *ctx);
 
 /* Generate an audio tone which can be pushed out on a PCM channel */
-int kl_colorbar_tonegenerator(int toneFreqHz, int sampleSize,
+int kl_colorbar_tonegenerator(struct kl_colorbar_audio_context *audio_ctx,
+			      int toneFreqHz, int sampleSize,
 			      int channelCount, int durationUs,
-			      int sampleRate, int signedSample,
-			      char *buf, size_t maxBufLen,
-			      size_t *resultBufLen);
+			      int sampleRate, int signedSample);
+
+void kl_colorbar_tonegenerator_extract(struct kl_colorbar_audio_context *audio_ctx,
+				       unsigned char *buf, size_t bufSize);
 
 #ifdef __cplusplus
 };
