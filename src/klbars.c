@@ -76,15 +76,15 @@ void kl_colorbar_free(struct kl_colorbar_context *ctx)
 // SD 75% Colour Bars
 static uint32_t gSD75pcColourBars[7] =
 {
-	0xeb80eb80, 0xa28ea22c, 0x832c839c, 0x703a7048,
+	0xb480b480, 0xa28ea22c, 0x832c839c, 0x703a7048,
 	0x54c654b8, 0x41d44164, 0x237223d4
 };
 
 // HD 75% Colour Bars
-static uint32_t gHD75pcColourBars[8] =
+static uint32_t gHD75pcColourBars[7] =
 {
-	0xeb80eb80, 0xa888a82c, 0x912c9193, 0x8534853f,
-	0x3fcc3fc1, 0x33d4336d, 0x1c781cd4, 0x10801080
+	0xb480b480, 0xa888a82c, 0x912c9193, 0x8634863f,
+	0x3fcc3fc1, 0x33d4336d, 0x1c781cd4
 };
 
 /* Intended to conform to EIA-189-A */
@@ -124,19 +124,19 @@ void kl_colorbar_fill_colorbars(struct kl_colorbar_context *ctx)
 
 	/* White */
 	while (x < b_width * 2) {
-		*(nextWord++) = 0xff80ff80;
+		*(nextWord++) = 0xeb80eb80;
 		x += 2;
 	}
 
 	/* -Q */
 	while (x < b_width * 3) {
-		*(nextWord++) = 0x109410af;
+		*(nextWord++) = 0x109410ad;
 		x += 2;
 	}
 
 	/* Black */
 	while (x < ctx->width) {
-		*(nextWord++) = 0x00800080;
+		*(nextWord++) = 0x10801080;
 		x += 2;
 	}
 	y++;
