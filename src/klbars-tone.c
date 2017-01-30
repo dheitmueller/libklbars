@@ -110,3 +110,8 @@ void kl_colorbar_tonegenerator_extract(struct kl_colorbar_audio_context *audio_c
 		audio_ctx->currentLocation = c2_size;
 	}
 }
+
+void kl_colorbar_tonegenerator_free(struct kl_colorbar_audio_context *ctx)
+{
+	free(ctx->audio_data);
+}

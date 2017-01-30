@@ -65,6 +65,9 @@ int kl_colorbar_tonegenerator(struct kl_colorbar_audio_context *audio_ctx,
 void kl_colorbar_tonegenerator_extract(struct kl_colorbar_audio_context *audio_ctx,
 				       unsigned char *buf, size_t bufSize);
 
+/* Free an initialized colorbars context */
+void kl_colorbar_tonegenerator_free(struct kl_colorbar_audio_context *ctx);
+
 #ifdef __cplusplus
 };
 #endif
