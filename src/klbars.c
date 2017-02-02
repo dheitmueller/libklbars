@@ -18,6 +18,9 @@
 int kl_colorbar_init(struct kl_colorbar_context *ctx, unsigned int width,
 		     unsigned int height, int bitDepth)
 {
+	if (!ctx)
+		return -1;
+
 	memset(ctx, 0, sizeof(*ctx));
 
 	ctx->width = width;
@@ -36,6 +39,9 @@ int kl_colorbar_init(struct kl_colorbar_context *ctx, unsigned int width,
 int kl_colorbar_finalize(struct kl_colorbar_context *ctx, unsigned char *buf,
 			 unsigned int byteStride)
 {
+	if ((!ctx) || (!buf) || (byteStride == 0))
+		return -1;
+
 	int y;
 	if (ctx->colorspace == KL_COLORBAR_8BIT) {
 		for (y = 0; y < ctx->height; y++) {
@@ -76,6 +82,9 @@ int kl_colorbar_finalize(struct kl_colorbar_context *ctx, unsigned char *buf,
 
 void kl_colorbar_free(struct kl_colorbar_context *ctx)
 {
+	if (!ctx)
+		return;
+
 	free(ctx->frame);
 }
 
@@ -96,6 +105,9 @@ static uint32_t gHD75pcColourBars[7] =
 /* Intended to conform to EIA-189-A */
 void kl_colorbar_fill_colorbars(struct kl_colorbar_context *ctx)
 {
+	if (!ctx)
+		return;
+
 	uint32_t *nextWord = (uint32_t *) ctx->frame;
 	uint32_t *bars;
 	uint32_t y = 0;
@@ -159,6 +171,9 @@ void kl_colorbar_fill_colorbars(struct kl_colorbar_context *ctx)
 
 void kl_colorbar_fill_black(struct kl_colorbar_context *ctx)
 {
+	if (!ctx)
+		return;
+
 	uint32_t *nextWord = (uint32_t *) ctx->frame;
 
 	long wordsRemaining = (ctx->width * 2 * ctx->height) / 4;
@@ -257,6 +272,8 @@ static int kl_colorbar_render_ascii(struct kl_colorbar_context *ctx, uint8_t let
 
 int kl_colorbar_render_string(struct kl_colorbar_context *ctx, uint8_t *s, int len, int x, int y)
 {
+	if ((!ctx) || (!s) || (len <= 0) || (x < 0) || (y < 0))
+		return -1;
 	int i;
     
 	for (i = 0; i < len; i++)
@@ -267,6 +284,9 @@ int kl_colorbar_render_string(struct kl_colorbar_context *ctx, uint8_t *s, int l
 
 int kl_colorbar_render_reset(struct kl_colorbar_context *ctx)
 {
+	if (!ctx)
+		return -1;
+
 	ctx->ptr = ctx->frame;
 
 	if (ctx->width < 1280) {
