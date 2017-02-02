@@ -6,6 +6,7 @@ AC_INIT([libklbars], [1.0], [dheitmueller@kernellabs.com])
 AM_INIT_AUTOMAKE
 AC_CONFIG_MACRO_DIR([m4])
 AC_CANONICAL_HOST
+AM_SILENT_RULES([yes])
 
 # Checks for programs.
 AC_PROG_CC
