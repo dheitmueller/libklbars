@@ -112,6 +112,7 @@ void kl_colorbar_fill_colorbars(struct kl_colorbar_context *ctx)
 	/* Vertical color bars for top 75% of field */
 	for (uint32_t x = 0; x < ctx->width; x+=2)
 		*(nextWord++) = bars[(x * 7) / ctx->width];
+	y++;
 
 	rowPtr = ctx->frame + rowStride * y;
 	for (y = 1; y < (ctx->height * 3 / 4); y++) {
