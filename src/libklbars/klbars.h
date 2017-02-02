@@ -70,6 +70,11 @@ int kl_colorbar_finalize(struct kl_colorbar_context *ctx, unsigned char *buf,
  */
 void kl_colorbar_free(struct kl_colorbar_context *ctx);
 
+/**
+ * @brief       Reset / re-initialize any internal position mechanisms related to string compositing.
+ *              Generally you should do this at the beginning of every frame, before you render strings.
+ * @param[in]   struct kl_colorbar_context *ctx - Context.
+ */
 int kl_colorbar_render_reset(struct kl_colorbar_context *ctx);
 
 /**
