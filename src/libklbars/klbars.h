@@ -51,7 +51,7 @@ int kl_colorbar_finalize(struct kl_colorbar_context *ctx, unsigned char *buf,
 void kl_colorbar_free(struct kl_colorbar_context *ctx);
 
 int kl_colorbar_render_reset(struct kl_colorbar_context *ctx);
-    int kl_colorbar_render_string(struct kl_colorbar_context *ctx, unsigned char *s, int len, int x, int y);
+int kl_colorbar_render_string(struct kl_colorbar_context *ctx, unsigned char *s, int len, int x, int y);
 
 void kl_colorbar_fill_colorbars (struct kl_colorbar_context *ctx);
 void kl_colorbar_fill_black (struct kl_colorbar_context *ctx);
