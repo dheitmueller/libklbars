@@ -15,8 +15,6 @@
 
 #define ALPHA_BACKGROUND 0
 
-typedef unsigned char u8;
-
 int kl_colorbar_init(struct kl_colorbar_context *ctx, unsigned int width,
 		     unsigned int height, int bitDepth)
 {
@@ -179,10 +177,10 @@ static int kl_colorbar_render_moveto(struct kl_colorbar_context *ctx, int x, int
 	return 0;
 }
 
-int kl_colorbar_render_character(struct kl_colorbar_context *ctx, u8 letter)
+int kl_colorbar_render_character(struct kl_colorbar_context *ctx, uint8_t letter)
 {
 	int i, j, k;
-	u8 line;
+	uint8_t line;
     
 	if (letter > 0x9f)
 		return -1;
@@ -237,7 +235,7 @@ int kl_colorbar_render_character(struct kl_colorbar_context *ctx, u8 letter)
 	return 0;
 }
 
-static int kl_colorbar_render_ascii(struct kl_colorbar_context *ctx, u8 letter, int x, int y)
+static int kl_colorbar_render_ascii(struct kl_colorbar_context *ctx, uint8_t letter, int x, int y)
 {
 	if (letter > 0x9f)
 		return -1;
@@ -248,7 +246,7 @@ static int kl_colorbar_render_ascii(struct kl_colorbar_context *ctx, u8 letter, 
 	return 0;
 }
 
-int kl_colorbar_render_string(struct kl_colorbar_context *ctx, u8 *s, int len, int x, int y)
+int kl_colorbar_render_string(struct kl_colorbar_context *ctx, uint8_t *s, int len, int x, int y)
 {
 	int i;
     
