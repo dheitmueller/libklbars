@@ -201,7 +201,7 @@ static int kl_colorbar_render_moveto(struct kl_colorbar_context *ctx, int x, int
 	return 0;
 }
 
-int kl_colorbar_render_character(struct kl_colorbar_context *ctx, uint8_t letter)
+static int kl_colorbar_render_character(struct kl_colorbar_context *ctx, uint8_t letter)
 {
 	int i, j, k;
 	uint8_t line;
