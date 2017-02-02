@@ -5,6 +5,8 @@ lib_LTLIBRARIES = libklbars.la
 
 libklbars_la_SOURCES = klbars.c klbars-tone.c
 
+noinst_HEADERS = font8x8_basic.h
+
 libklbars_la_CFLAGS = -Wall -DVERSION=\"$(VERSION)\" -DPROG="\"$(PACKAGE)\"" \
 	-D_FILE_OFFSET_BITS=64 -O3 -D_BSD_SOURCE -I$(top_srcdir)/include \
 	-DKL_USERSPACE
