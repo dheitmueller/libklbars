@@ -20,3 +20,4 @@ missing
 libklbars.la
 src/*.lo
 doxygen/html
+tools/klbars_test
