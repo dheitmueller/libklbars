@@ -1,10 +1,8 @@
-//
-//  klbars.c
-//  Kernel Labs Colorbar Generator
-//
-//  Created by Devin Heitmueller
-//  Copyright (c) 2016 Kernel Labs Inc. All rights reserved.
-//
+/**
+ * @file        klbars.c
+ * @author      Devin Heitmueller <dheitmueller@kernellabs.com>
+ * @copyright   Copyright (c) 2016-2017 Kernel Labs Inc. All Rights Reserved.
+ */
 
 #include <stdio.h>
 #include <string.h>
@@ -18,6 +16,9 @@
 int kl_colorbar_init(struct kl_colorbar_context *ctx, unsigned int width,
 		     unsigned int height, int bitDepth)
 {
+	if (!ctx)
+		return -1;
+
 	memset(ctx, 0, sizeof(*ctx));
 
 	ctx->width = width;
@@ -36,16 +37,18 @@ int kl_colorbar_init(struct kl_colorbar_context *ctx, unsigned int width,
 int kl_colorbar_finalize(struct kl_colorbar_context *ctx, unsigned char *buf,
 			 unsigned int byteStride)
 {
-	int y;
+	if ((!ctx) || (!buf) || (byteStride == 0))
+		return -1;
+
 	if (ctx->colorspace == KL_COLORBAR_8BIT) {
-		for (y = 0; y < ctx->height; y++) {
+		for (int y = 0; y < ctx->height; y++) {
 			memcpy(buf, ctx->frame + (y * ctx->width * 2), ctx->width * 2);
 			buf += byteStride;
 		}
 	} else {
 		/* For now just handle the colorspace in 8-bit, and colorspace convert
 		   it to 10-bit on finalize */
-		for (y = 0; y < ctx->height; y++) {
+		for (int y = 0; y < ctx->height; y++) {
 			/* Note, we're simultaneously converting 8-bit to 10-bit *AND*
 			   repacking to 10-bit in the same operation, which is why this
 			   is pretty convoluted */
@@ -76,6 +79,9 @@ int kl_colorbar_finalize(struct kl_colorbar_context *ctx, unsigned char *buf,
 
 void kl_colorbar_free(struct kl_colorbar_context *ctx)
 {
+	if (!ctx)
+		return;
+
 	free(ctx->frame);
 }
 
@@ -96,6 +102,9 @@ static uint32_t gHD75pcColourBars[7] =
 /* Intended to conform to EIA-189-A */
 void kl_colorbar_fill_colorbars(struct kl_colorbar_context *ctx)
 {
+	if (!ctx)
+		return;
+
 	uint32_t *nextWord = (uint32_t *) ctx->frame;
 	uint32_t *bars;
 	uint32_t y = 0;
@@ -159,6 +168,9 @@ void kl_colorbar_fill_colorbars(struct kl_colorbar_context *ctx)
 
 void kl_colorbar_fill_black(struct kl_colorbar_context *ctx)
 {
+	if (!ctx)
+		return;
+
 	uint32_t *nextWord = (uint32_t *) ctx->frame;
 
 	long wordsRemaining = (ctx->width * 2 * ctx->height) / 4;
@@ -186,19 +198,18 @@ static int kl_colorbar_render_moveto(struct kl_colorbar_context *ctx, int x, int
 	return 0;
 }
 
-int kl_colorbar_render_character(struct kl_colorbar_context *ctx, uint8_t letter)
+static int kl_colorbar_render_character(struct kl_colorbar_context *ctx, uint8_t letter)
 {
-	int i, j, k;
 	uint8_t line;
     
 	if (letter > 0x9f)
 		return -1;
     
-	for (i = 0; i < 8; i++) {
-		k = 0;
+	for (int i = 0; i < 8; i++) {
+		int k = 0;
 		while (k++ < 4) {
 			line = font8x8_basic[letter][ i ];
-			for (j = 0; j < 8; j++) {
+			for (int j = 0; j < 8; j++) {
 				if (line & 0x01) {
 					/* font color */
 					*(ctx->ptr + 0) = ctx->fg[0];
@@ -255,11 +266,12 @@ static int kl_colorbar_render_ascii(struct kl_colorbar_context *ctx, uint8_t let
 	return 0;
 }
 
-int kl_colorbar_render_string(struct kl_colorbar_context *ctx, uint8_t *s, int len, int x, int y)
+int kl_colorbar_render_string(struct kl_colorbar_context *ctx, uint8_t *s, unsigned int len, unsigned int x, unsigned int y)
 {
-	int i;
+	if ((!ctx) || (!s) || (len == 0) || (len > 128))
+		return -1;
     
-	for (i = 0; i < len; i++)
+	for (unsigned int i = 0; i < len; i++)
 		kl_colorbar_render_ascii(ctx, *(s + i), x + i, y);
     
 	return 0;
@@ -267,6 +279,9 @@ int kl_colorbar_render_string(struct kl_colorbar_context *ctx, uint8_t *s, int l
 
 int kl_colorbar_render_reset(struct kl_colorbar_context *ctx)
 {
+	if (!ctx)
+		return -1;
+
 	ctx->ptr = ctx->frame;
 
 	if (ctx->width < 1280) {
