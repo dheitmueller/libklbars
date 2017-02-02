@@ -2,8 +2,9 @@
 AUTOMAKE_OPTIONS = foreign
 
 CFLAGS += -Wall -DVERSION=\"$(VERSION)\" -DPROG="\"$(PACKAGE)\"" -D_FILE_OFFSET_BITS=64 -O3 \
-	-I$(top_srcdir)/src \
-	-L$(top_builddir)/src/.libs -lpthread -lklbars
+	-I$(top_srcdir)/src
+
+LDFLAGS += -L$(top_builddir)/src/.libs -lpthread -lklbars
 
 if DEBUG
 	CFLAGS += -g
