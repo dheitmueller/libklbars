@@ -42,16 +42,15 @@ int kl_colorbar_finalize(struct kl_colorbar_context *ctx, unsigned char *buf,
 	if ((!ctx) || (!buf) || (byteStride == 0))
 		return -1;
 
-	int y;
 	if (ctx->colorspace == KL_COLORBAR_8BIT) {
-		for (y = 0; y < ctx->height; y++) {
+		for (int y = 0; y < ctx->height; y++) {
 			memcpy(buf, ctx->frame + (y * ctx->width * 2), ctx->width * 2);
 			buf += byteStride;
 		}
 	} else {
 		/* For now just handle the colorspace in 8-bit, and colorspace convert
 		   it to 10-bit on finalize */
-		for (y = 0; y < ctx->height; y++) {
+		for (int y = 0; y < ctx->height; y++) {
 			/* Note, we're simultaneously converting 8-bit to 10-bit *AND*
 			   repacking to 10-bit in the same operation, which is why this
 			   is pretty convoluted */
@@ -203,17 +202,16 @@ static int kl_colorbar_render_moveto(struct kl_colorbar_context *ctx, int x, int
 
 static int kl_colorbar_render_character(struct kl_colorbar_context *ctx, uint8_t letter)
 {
-	int i, j, k;
 	uint8_t line;
     
 	if (letter > 0x9f)
 		return -1;
     
-	for (i = 0; i < 8; i++) {
-		k = 0;
+	for (int i = 0; i < 8; i++) {
+		int k = 0;
 		while (k++ < 4) {
 			line = font8x8_basic[letter][ i ];
-			for (j = 0; j < 8; j++) {
+			for (int j = 0; j < 8; j++) {
 				if (line & 0x01) {
 					/* font color */
 					*(ctx->ptr + 0) = ctx->fg[0];
@@ -274,9 +272,8 @@ int kl_colorbar_render_string(struct kl_colorbar_context *ctx, uint8_t *s, unsig
 {
 	if ((!ctx) || (!s) || (len == 0) || (len > 128))
 		return -1;
-	int i;
     
-	for (i = 0; i < len; i++)
+	for (unsigned int i = 0; i < len; i++)
 		kl_colorbar_render_ascii(ctx, *(s + i), x + i, y);
     
 	return 0;
