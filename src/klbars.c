@@ -1,10 +1,8 @@
-//
-//  klbars.c
-//  Kernel Labs Colorbar Generator
-//
-//  Created by Devin Heitmueller
-//  Copyright (c) 2016 Kernel Labs Inc. All rights reserved.
-//
+/**
+ * @file        klbars.c
+ * @author      Devin Heitmueller <dheitmueller@kernellabs.com>
+ * @copyright   Copyright (c) 2016-2017 Kernel Labs Inc. All Rights Reserved.
+ */
 
 #include <stdio.h>
 #include <string.h>
