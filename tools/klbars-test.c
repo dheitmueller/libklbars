@@ -10,6 +10,7 @@ int main()
 	struct kl_colorbar_context osd_ctx;
 	int width=640, height=480;
 	unsigned char *buf;
+	int ret;
 
 	/* Use the custom V210 stride required by the Decklink stack */
 	int rowWidth = ((width + 47) / 48) * 128;
@@ -31,7 +32,11 @@ int main()
 		fprintf(stderr, "Failed to open output file\n");
 		return 1;
 	}
-	write(fd, buf, rowWidth * height);
+	ret = write(fd, buf, rowWidth * height);
+	if (ret < 0)
+		fprintf(stderr, "Error writing to file: %d\n", ret);
+	else
+		fprintf(stderr, "%d bytes written to file\n", ret);
 	close(fd);
 
 	kl_colorbar_free(&osd_ctx);
