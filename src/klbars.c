@@ -55,13 +55,21 @@ int kl_colorbar_finalize(struct kl_colorbar_context *ctx, unsigned char *buf,
 			/* FIXME:  this just begs for some SSE optimization */
 			unsigned char *line = ctx->frame + (y * ctx->width * 2);
 			int n = 0;
-			for (int x = 0; x < ctx->width * 2; x+= 3) {
+			int x = 0;
+			for (x = 0; x < (ctx->width - 2) * 2; x+= 3) {
 				buf[n] = line[x] << 2;
 				buf[n+1] = (line[x] >> 6) | (line[x+1] << 4);
 				buf[n+2] = (line[x+1] >> 4) | (line [x+2] << 6);
 				buf[n+3] = (line[x+2] >> 2);
 				n += 4;
 			}
+
+			/* Each increment of the above loop processes 1.5 pixels on
+			   the input buffer, so we need deal with the remainder */
+			buf[n] = line[x] << 2;
+			buf[n+1] = (line[x] >> 6) | (line[x+1] << 4);
+			buf[n+2] = (line[x+1] >> 4);
+
 			buf += byteStride;
 		}
 	}
