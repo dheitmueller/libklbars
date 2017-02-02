@@ -27,9 +27,14 @@ int main()
   printf("\n");
 
   int fd = open("foo.yuv", O_WRONLY | O_TRUNC | O_CREAT, 0644);
+  if (fd < 0) {
+	  fprintf(stderr, "Failed to open output file\n");
+	  return 1;
+  }
   write(fd, buf, rowWidth * height);
   close(fd);
 
   kl_colorbar_free(&osd_ctx);
+  free(buf);
   return 0;
 }
