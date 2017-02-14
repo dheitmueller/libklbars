@@ -266,7 +266,7 @@ static int kl_colorbar_render_ascii(struct kl_colorbar_context *ctx, uint8_t let
 	return 0;
 }
 
-int kl_colorbar_render_string(struct kl_colorbar_context *ctx, uint8_t *s, unsigned int len, unsigned int x, unsigned int y)
+int kl_colorbar_render_string(struct kl_colorbar_context *ctx, char *s, unsigned int len, unsigned int x, unsigned int y)
 {
 	if ((!ctx) || (!s) || (len == 0) || (len > 128))
 		return -1;

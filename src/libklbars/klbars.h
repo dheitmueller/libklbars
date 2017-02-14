@@ -80,14 +80,14 @@ int kl_colorbar_render_reset(struct kl_colorbar_context *ctx);
 /**
  * @brief       Composite the string 's' of length into the colorbar at position x, y, where 0,0 is top left.
  * @param[in]   struct kl_colorbar_context *ctx - Context.
- * @param[in]   unsigned char *s - ASCII string.
+ * @param[in]   char *s - ASCII string.
  * @param[in]   unsigned int len - length of string in bytes, maximum 128 bytes.
  * @param[in]   unsigned int x - Horizontal position
  * @param[in]   unsigned int y - Veritical position
  * @return      0 - Success
  * @return      < 0 - Error
  */
-int kl_colorbar_render_string(struct kl_colorbar_context *ctx, unsigned char *s, unsigned int len, unsigned int x, unsigned int y);
+int kl_colorbar_render_string(struct kl_colorbar_context *ctx, char *s, unsigned int len, unsigned int x, unsigned int y);
 
 /**
  * @brief       Generate a colorbar frame, which was previously configured via KL_COLORBAR_xxx.
