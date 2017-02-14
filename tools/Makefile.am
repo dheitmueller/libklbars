@@ -12,10 +12,12 @@ endif
 
 CXXFLAGS = $(CFLAGS)
 
-SRC  = klbars-test.c
+klbars_test_SRC  = klbars-test.c
+klbars_benchmark_SRC  = klbars-benchmark.c
 
-bin_PROGRAMS  = klbars_test
+bin_PROGRAMS  = klbars_test klbars_benchmark
 
-klbars_test_SOURCES = $(SRC)
+klbars_test_SOURCES = $(klbars_test_SRC)
+klbars_benchmark_SOURCES = $(klbars_benchmark_SRC)
 
 libklbars_noinst_includedir = $(includedir)
