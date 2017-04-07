@@ -1,10 +1,11 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-CFLAGS += -Wall -DVERSION=\"$(VERSION)\" -DPROG="\"$(PACKAGE)\"" -D_FILE_OFFSET_BITS=64 -O3 \
+AM_CPPFLAGS = -DVERSION=\"$(VERSION)\" -DPROG="\"$(PACKAGE)\"" -D_FILE_OFFSET_BITS=64 \
 	-I$(top_srcdir)/src
+AM_CFLAGS = -Wall -O3
 
-LDFLAGS += -L$(top_builddir)/src/.libs -lpthread -lklbars
+LDADD = ../src/libklbars.la -lpthread
 
 if DEBUG
 	CFLAGS += -g
