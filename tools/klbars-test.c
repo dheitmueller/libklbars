@@ -20,8 +20,7 @@ int main()
 	memset(buf, 0, rowWidth * height);
 	kl_colorbar_init(&osd_ctx, width, height, KL_COLORBAR_10BIT);
 	kl_colorbar_fill_colorbars(&osd_ctx);
-	kl_colorbar_finalize(&osd_ctx, buf, rowWidth);
-
+	kl_colorbar_finalize(&osd_ctx, buf, KL_COLORBAR_10BIT, rowWidth);
 	for (int i = 0; i < 32; i++) {
 		printf("%02x ", buf[i]);
 	}

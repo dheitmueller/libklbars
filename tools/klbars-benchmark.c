@@ -8,7 +8,7 @@
 
 #define NUM_ITERATIONS 7500
 
-int run_iteration(int width, int height, int bitdepth)
+int run_iteration(int width, int height, int indepth, int bitdepth)
 {
 	struct kl_colorbar_context osd_ctx;
 	unsigned char *buf;
@@ -19,10 +19,11 @@ int run_iteration(int width, int height, int bitdepth)
 
 	buf = malloc(rowWidth * height);
 	memset(buf, 0, rowWidth * height);
-	kl_colorbar_init(&osd_ctx, width, height, bitdepth);
+	kl_colorbar_init(&osd_ctx, width, height, indepth);
 
-	printf("Generating %dx%d colorbars (%d-bit) %d times...\n", width, height,
-	       (bitdepth == KL_COLORBAR_10BIT ? 10 : 8), NUM_ITERATIONS);
+	printf("Generating %dx%d %d-bit colorbars (%d-bit internal) %d times...\n",
+	       width, height, (bitdepth == KL_COLORBAR_10BIT ? 10 : 8),
+	       (indepth == KL_COLORBAR_10BIT ? 10 : 8), NUM_ITERATIONS);
 	gettimeofday(&start_time, NULL);
 	printf("Start time\t%ld.%06d\n", start_time.tv_sec, start_time.tv_usec);
 	for (int i = 0; i < NUM_ITERATIONS; i++) {
@@ -30,7 +31,7 @@ int run_iteration(int width, int height, int bitdepth)
 		char text[64];
 		snprintf(text, sizeof(text), "Hello World!\n");
 		kl_colorbar_render_string(&osd_ctx, text, strlen(text), 0, 2);
-		kl_colorbar_finalize(&osd_ctx, buf, rowWidth);
+		kl_colorbar_finalize(&osd_ctx, buf, bitdepth, rowWidth);
 	}
 	gettimeofday(&end_time, NULL);
 	printf("End time\t%ld.%06d\n", end_time.tv_sec, end_time.tv_usec);
@@ -49,13 +50,24 @@ int run_iteration(int width, int height, int bitdepth)
 
 int main()
 {
-  run_iteration(640, 480, KL_COLORBAR_8BIT);
-  run_iteration(640, 480, KL_COLORBAR_10BIT);
+	/* 8-bit internal buffers */
+	run_iteration(640, 480, KL_COLORBAR_8BIT, KL_COLORBAR_8BIT);
+	run_iteration(640, 480, KL_COLORBAR_8BIT, KL_COLORBAR_10BIT);
 
-  run_iteration(1280, 720, KL_COLORBAR_8BIT);
-  run_iteration(1280, 720, KL_COLORBAR_10BIT);
+	run_iteration(1280, 720, KL_COLORBAR_8BIT, KL_COLORBAR_8BIT);
+	run_iteration(1280, 720, KL_COLORBAR_8BIT, KL_COLORBAR_10BIT);
 
-  run_iteration(1920, 1080, KL_COLORBAR_8BIT);
-  run_iteration(1920, 1080, KL_COLORBAR_10BIT);
-  return 0;
+	run_iteration(1920, 1080, KL_COLORBAR_8BIT, KL_COLORBAR_8BIT);
+	run_iteration(1920, 1080, KL_COLORBAR_8BIT, KL_COLORBAR_10BIT);
+
+	/* 10-bit internal buffers */
+	run_iteration(640, 480, KL_COLORBAR_10BIT, KL_COLORBAR_8BIT);
+	run_iteration(640, 480, KL_COLORBAR_10BIT, KL_COLORBAR_10BIT);
+
+	run_iteration(1280, 720, KL_COLORBAR_10BIT, KL_COLORBAR_8BIT);
+	run_iteration(1280, 720, KL_COLORBAR_10BIT, KL_COLORBAR_10BIT);
+
+	run_iteration(1920, 1080, KL_COLORBAR_10BIT, KL_COLORBAR_8BIT);
+	run_iteration(1920, 1080, KL_COLORBAR_10BIT, KL_COLORBAR_10BIT);
+	return 0;
 }

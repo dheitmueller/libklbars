@@ -61,7 +61,7 @@ int kl_colorbar_init(struct kl_colorbar_context *ctx, unsigned int width,
  * @return      < 0 - Error
  */
 int kl_colorbar_finalize(struct kl_colorbar_context *ctx, unsigned char *buf,
-			 unsigned int byteStride);
+			 int targetColorspace, unsigned int byteStride);
 /**
  * @brief       Free any internal allocations containined within the context, but note that this DOES NOT
  *              free the context itself. The context is user allocated and user destroyed. The context is no longer
