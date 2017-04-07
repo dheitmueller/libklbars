@@ -174,3 +174,33 @@ int kl_colorbar_render_reset(struct kl_colorbar_context *ctx)
 
 	return 0;
 }
+
+int kl_colorbar_fill_pattern (struct kl_colorbar_context *ctx, enum kl_colorbar_pattern pattern)
+{
+	switch (pattern) {
+	case KL_COLORBAR_BLACK:
+		kl_colorbar_fill_black(ctx);
+		break;
+	case KL_COLORBAR_EIA_189A:
+		kl_colorbar_fill_colorbars(ctx);
+		break;
+	default:
+		return -1;
+	}
+	return 0;
+}
+
+const char *kl_colorbar_get_pattern_name (struct kl_colorbar_context *ctx, enum kl_colorbar_pattern pattern)
+{
+	switch (pattern) {
+	case KL_COLORBAR_BLACK:
+		return "Black field";
+		break;
+	case KL_COLORBAR_EIA_189A:
+		return "EIA-189A Colorbars";
+		break;
+	default:
+		return NULL;
+	}
+	return 0;
+}

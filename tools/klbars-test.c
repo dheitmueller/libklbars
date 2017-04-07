@@ -19,7 +19,16 @@ int main()
 	buf = malloc(rowWidth * height);
 	memset(buf, 0, rowWidth * height);
 	kl_colorbar_init(&osd_ctx, width, height, KL_COLORBAR_10BIT);
-	kl_colorbar_fill_colorbars(&osd_ctx);
+
+	/* List all available patterns */
+	for (int i = 0; i < 255; i++) {
+		const char *name = kl_colorbar_get_pattern_name(&osd_ctx, i);
+		if (name == NULL)
+			break;
+		printf("Pattern %d: %s\n", i, name);
+	}
+
+	kl_colorbar_fill_pattern(&osd_ctx, KL_COLORBAR_EIA_189A);
 	kl_colorbar_finalize(&osd_ctx, buf, KL_COLORBAR_10BIT, rowWidth);
 	for (int i = 0; i < 32; i++) {
 		printf("%02x ", buf[i]);

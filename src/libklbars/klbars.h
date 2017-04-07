@@ -77,6 +77,10 @@ void kl_colorbar_free(struct kl_colorbar_context *ctx);
  */
 int kl_colorbar_render_reset(struct kl_colorbar_context *ctx);
 
+enum kl_colorbar_pattern {
+	KL_COLORBAR_BLACK,
+	KL_COLORBAR_EIA_189A,
+};
 /**
  * @brief       Composite the string 's' of length into the colorbar at position x, y, where 0,0 is top left.
  * @param[in]   struct kl_colorbar_context *ctx - Context.
@@ -90,6 +94,13 @@ int kl_colorbar_render_reset(struct kl_colorbar_context *ctx);
 int kl_colorbar_render_string(struct kl_colorbar_context *ctx, char *s, unsigned int len, unsigned int x, unsigned int y);
 
 /**
+ * @brief       Fill colorbar with a pattern (e.g. EIA-189 colorbars, black video, etc)
+ * @param[in]   struct kl_colorbar_context *ctx - Context.
+ * @param[in]   enum kl_colorbar_pattern pattern - The pattern to use.
+ */
+int kl_colorbar_fill_pattern (struct kl_colorbar_context *ctx, enum kl_colorbar_pattern pattern);
+
+/**
  * @brief       Generate a colorbar frame, which was previously configured via KL_COLORBAR_xxx.
  * @param[in]   struct kl_colorbar_context *ctx - Context.
  */
@@ -100,6 +111,18 @@ void kl_colorbar_fill_colorbars (struct kl_colorbar_context *ctx);
  * @param[in]   struct kl_colorbar_context *ctx - Context.
  */
 void kl_colorbar_fill_black (struct kl_colorbar_context *ctx);
+
+/**
+ * @brief       Retrieve name of named pattern.
+ *              This allows an application to get a textual representation
+ *              for a named pattern.  Typically the application would use a
+ *              loop to get the names of all the available patterns (i.e.
+ *              increment pattern until NULL is returned).
+ * @param[in]   struct kl_colorbar_context *ctx - Context.
+ */
+const char *kl_colorbar_get_pattern_name (struct kl_colorbar_context *ctx,
+					  enum kl_colorbar_pattern pattern);
+
 
 /**
  * @brief       TODO: Document..... Generate an audio tone which can be pushed out on a PCM channel.
