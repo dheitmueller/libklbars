@@ -78,6 +78,7 @@ void kl_colorbar_free(struct kl_colorbar_context *ctx);
 int kl_colorbar_render_reset(struct kl_colorbar_context *ctx);
 
 enum kl_colorbar_pattern {
+	KL_COLORBAR_SMPTE_RP_219_1,
 	KL_COLORBAR_BLACK,
 	KL_COLORBAR_EIA_189A,
 };

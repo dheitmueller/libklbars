@@ -153,6 +153,30 @@ void compute_colorbar_10bit_array(const uint32_t uyvy, uint8_t *bar10)
 	bar10[15] = (y0 >> 4);
 }
 
+void compute_colorbar_10bit_array2(uint16_t y0, uint16_t cb, uint16_t cr,
+				   uint8_t *bar10)
+{
+	bar10[0] = cb & 0xff;
+	bar10[1] = (cb >> 8) | ((y0 & 0x3f) << 2);
+	bar10[2] = (y0 >> 6) | ((cr & 0x0f) << 4);
+	bar10[3] = (cr >> 4);
+
+	bar10[4] = y0 & 0xff;
+	bar10[5] = (y0 >> 8) | ((cb & 0x3f) << 2);
+	bar10[6] = (cb >> 6) | ((y0 & 0x0f) << 4);
+	bar10[7] = (y0 >> 4);
+
+	bar10[8] = cr & 0xff;
+	bar10[9] = (cr >> 8) | ((y0 & 0x3f) << 2);
+	bar10[10] = (y0 >> 6) | ((cb & 0x0f) << 4);
+	bar10[11] = (cb >> 4);
+
+	bar10[12] = y0 & 0xff;
+	bar10[13] = (y0 >> 8) | ((cr & 0x3f) << 2);
+	bar10[14] = (cr >> 6) | ((y0 & 0x0f) << 4);
+	bar10[15] = (y0 >> 4);
+}
+
 int kl_colorbar_render_reset(struct kl_colorbar_context *ctx)
 {
 	if (!ctx)
@@ -184,6 +208,9 @@ int kl_colorbar_fill_pattern (struct kl_colorbar_context *ctx, enum kl_colorbar_
 	case KL_COLORBAR_EIA_189A:
 		kl_colorbar_fill_colorbars(ctx);
 		break;
+	case KL_COLORBAR_SMPTE_RP_219_1:
+		kl_colorbar_fill_rp219_1(ctx);
+		break;
 	default:
 		return -1;
 	}
@@ -199,6 +226,8 @@ const char *kl_colorbar_get_pattern_name (struct kl_colorbar_context *ctx, enum 
 	case KL_COLORBAR_EIA_189A:
 		return "EIA-189A Colorbars";
 		break;
+	case KL_COLORBAR_SMPTE_RP_219_1:
+		return "SMPTE RP 219-1 Colorbars";
 	default:
 		return NULL;
 	}
