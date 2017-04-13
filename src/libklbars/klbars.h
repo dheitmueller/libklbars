@@ -99,8 +99,8 @@ int kl_colorbar_render_string(struct kl_colorbar_context *ctx, char *s, unsigned
 
 /**
  * @brief       Fill colorbar with a pattern (e.g. EIA-189 colorbars, black video, etc)
- * @param[in]   struct kl_colorbar_context *ctx - Context.
- * @param[in]   enum kl_colorbar_pattern pattern - The pattern to use.
+ * @param[in]   kl_colorbar_context *ctx - Context.
+ * @param[in]   kl_colorbar_pattern pattern - The pattern to use.
  */
 int kl_colorbar_fill_pattern(struct kl_colorbar_context *ctx, enum kl_colorbar_pattern pattern);
 
