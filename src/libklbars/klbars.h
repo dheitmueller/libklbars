@@ -99,19 +99,19 @@ int kl_colorbar_render_string(struct kl_colorbar_context *ctx, char *s, unsigned
  * @param[in]   struct kl_colorbar_context *ctx - Context.
  * @param[in]   enum kl_colorbar_pattern pattern - The pattern to use.
  */
-int kl_colorbar_fill_pattern (struct kl_colorbar_context *ctx, enum kl_colorbar_pattern pattern);
+int kl_colorbar_fill_pattern(struct kl_colorbar_context *ctx, enum kl_colorbar_pattern pattern);
 
 /**
  * @brief       Generate a colorbar frame, which was previously configured via KL_COLORBAR_xxx.
  * @param[in]   struct kl_colorbar_context *ctx - Context.
  */
-void kl_colorbar_fill_colorbars (struct kl_colorbar_context *ctx);
+void kl_colorbar_fill_colorbars(struct kl_colorbar_context *ctx);
 
 /**
  * @brief       Generate a fixed black frame.
  * @param[in]   struct kl_colorbar_context *ctx - Context.
  */
-void kl_colorbar_fill_black (struct kl_colorbar_context *ctx);
+void kl_colorbar_fill_black(struct kl_colorbar_context *ctx);
 
 /**
  * @brief       Retrieve name of named pattern.
@@ -121,8 +121,8 @@ void kl_colorbar_fill_black (struct kl_colorbar_context *ctx);
  *              increment pattern until NULL is returned).
  * @param[in]   struct kl_colorbar_context *ctx - Context.
  */
-const char *kl_colorbar_get_pattern_name (struct kl_colorbar_context *ctx,
-					  enum kl_colorbar_pattern pattern);
+const char *kl_colorbar_get_pattern_name(struct kl_colorbar_context *ctx,
+					 enum kl_colorbar_pattern pattern);
 
 
 /**
