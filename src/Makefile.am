@@ -4,6 +4,7 @@ AUTOMAKE_OPTIONS = foreign
 lib_LTLIBRARIES = libklbars.la
 
 libklbars_la_SOURCES = klbars.c klbars-tone.c klbars-char.c klbars-eia189.c klbars-black.c klbars-rp219-1.c
+libklbars_la_SOURCES += klbars-internal.h
 
 noinst_HEADERS = font8x8_basic.h
 

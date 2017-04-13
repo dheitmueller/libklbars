@@ -212,7 +212,7 @@ static void gen_pattern_1(struct kl_colorbar_context *ctx, uint32_t row_num)
 				 pixel_offset, 111, 848, 481);
 
 	/* 40% Grey */
-	pixel_offset += draw_bar(ctx, row_num, ctx->width / 8,
+	draw_bar(ctx, row_num, ctx->width / 8,
 				 pixel_offset, 414, 512, 512);
 }
 
@@ -245,7 +245,7 @@ static void gen_pattern_2(struct kl_colorbar_context *ctx, uint32_t row_num)
 	pixel_offset += draw_bar(ctx, row_num, ctx->width * 3/4 * 6/7,
 				 pixel_offset, 721, 512, 512);
 	/* 100% Blue */
-	pixel_offset += draw_bar(ctx, row_num, ctx->width / 8,
+	draw_bar(ctx, row_num, ctx->width / 8,
 				 pixel_offset, 127, 960, 471);
 }
 
@@ -284,7 +284,7 @@ static void gen_pattern_3(struct kl_colorbar_context *ctx, uint32_t row_num)
 				 pixel_offset, 940, 512, 512);
 
 	/* 100% Red */
-	pixel_offset += draw_bar(ctx, row_num, ctx->width / 8,
+	draw_bar(ctx, row_num, ctx->width / 8,
 				 pixel_offset, 250, 409, 960);
 }
 
@@ -347,7 +347,7 @@ static void gen_pattern_4(struct kl_colorbar_context *ctx, uint32_t row_num)
 				 pixel_offset, 64, 512, 512);
 
 	/* 15% Gray */
-	pixel_offset += draw_bar(ctx, row_num, ctx->width / 8,
+	draw_bar(ctx, row_num, ctx->width / 8,
 				 pixel_offset, 195, 512, 512);
 }
 
