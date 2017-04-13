@@ -222,14 +222,11 @@ const char *kl_colorbar_get_pattern_name (struct kl_colorbar_context *ctx, enum 
 	switch (pattern) {
 	case KL_COLORBAR_BLACK:
 		return "Black field";
-		break;
 	case KL_COLORBAR_EIA_189A:
 		return "EIA-189A Colorbars";
-		break;
 	case KL_COLORBAR_SMPTE_RP_219_1:
 		return "SMPTE RP 219-1 Colorbars";
 	default:
 		return NULL;
 	}
-	return 0;
 }
