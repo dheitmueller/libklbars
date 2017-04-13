@@ -1,7 +1,42 @@
 /**
-\mainpage libklbars Documentation.
+\mainpage Kernel Labs libklbars Documentation
+    Copyright 2016-2017 Kernel Labs Inc.
 
-TODO: Enter description of what the tool does.
+    \section intro_sec Introduction
+    This library allows for the creation of video colorbars in numerous
+    formats typically found within the broadcast industry.  Colorbars can
+    be generated for arbitrary height/widths, and the library provides
+    basic functionality for text overlay over the colorbars.
 
-*/
+    \section features_sec Features
+    <ul>
+    <li>Generation of EIA-189A colorbars (both ITU 601 and ITU 709 colorspaces are supported)</li>
+    <li>Generation of SMPTE RP 219-1 HD Colorbars</li>
+    <li>Generation of 1 KHz audio tone (for use with bars/tone applications)</li>
+    <li>Support for both 8-bit and 10-bit color depths</li>
+    <li>UYVY and V210 pixel formats for output buffers</li>
+    <li>Support for overlaying arbitrary text over video</li>
+    </ul>
 
+    \section use_sec Basic Usage
+    Use of the API involves the following steps:
+    <ol>
+    <li>Create a klcolorbar context using kl_colorbar_init(), specifying the
+    desired width/height and pixel depth</li>
+    <li>Call kl_colorbar_fill_pattern() to write a user specified pattern into the
+    video frame</li>
+    <li>Call kl_colorbar_render_string() to insert text if desired.</li>
+    <li>Call kl_colorbar_finalize() to copy the colorbars to a user specified buffer</li>
+    </ol>
+    After calling kl_colorbar_finalize(), you can re-use the context by calling
+    kl_colorbar_fill_pattern() and/or kl_colorbar_render_string() as needed.  However
+    if you do not call kl_colorbar_fill_pattern() the text rendered will be present in
+    addition to whatever text was present prior to the call to kl_colorbar_finalize().
+    The process is additive until the user destroys the context or calls
+    kl_colorbar_fill_pattern() to overwrite the text previously written with new
+    colorbars.
+
+    \section example_sec Examples
+    Examples that make use of the libklbars libarary can found in the "tools" directory.
+
+**/

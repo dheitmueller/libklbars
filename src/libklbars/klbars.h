@@ -78,8 +78,11 @@ void kl_colorbar_free(struct kl_colorbar_context *ctx);
 int kl_colorbar_render_reset(struct kl_colorbar_context *ctx);
 
 enum kl_colorbar_pattern {
+	/** Colorbars conforming to SMPTE RP219-1 **/
 	KL_COLORBAR_SMPTE_RP_219_1,
+	/** Completely black video frame **/
 	KL_COLORBAR_BLACK,
+	/** Colorbars conforming to EIA-189A **/
 	KL_COLORBAR_EIA_189A,
 };
 /**
