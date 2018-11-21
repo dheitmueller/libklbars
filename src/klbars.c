@@ -45,6 +45,8 @@ int kl_colorbar_finalize(struct kl_colorbar_context *ctx, unsigned char *buf,
 	if ((!ctx) || (!buf) || (byteStride == 0))
 		return -1;
 
+	ctx->pic_count++;
+
 	if (ctx->colorspace == KL_COLORBAR_8BIT) {
 		if (targetColorspace == KL_COLORBAR_8BIT){
 			/* Just a straight memcpy() */
@@ -211,6 +213,9 @@ int kl_colorbar_fill_pattern (struct kl_colorbar_context *ctx, enum kl_colorbar_
 	case KL_COLORBAR_SMPTE_RP_219_1:
 		kl_colorbar_fill_rp219_1(ctx);
 		break;
+	case KL_COLORBAR_SMPTE_RP_198:
+		kl_colorbar_fill_rp198(ctx);
+		break;
 	default:
 		return -1;
 	}
@@ -226,6 +231,8 @@ const char *kl_colorbar_get_pattern_name (struct kl_colorbar_context *ctx, enum 
 		return "EIA-189A Colorbars";
 	case KL_COLORBAR_SMPTE_RP_219_1:
 		return "SMPTE RP 219-1 Colorbars";
+	case KL_COLORBAR_SMPTE_RP_198:
+		return "SMPTE RP 198 Checkfield";
 	default:
 		return NULL;
 	}

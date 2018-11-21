@@ -25,6 +25,8 @@ struct kl_colorbar_context
     unsigned int width, height; /* width/height in pixels */
     unsigned int stride;
 
+    unsigned int pic_count; /* Increments with every finalize */
+
     int plotwidth, plotheight, plotctrl;
     int colorspace;
 
@@ -84,6 +86,8 @@ enum kl_colorbar_pattern {
 	KL_COLORBAR_BLACK,
 	/** Colorbars conforming to EIA-189A **/
 	KL_COLORBAR_EIA_189A,
+	/* SMPTE RP 198 Checkfield for HD Interfaces (i.e. "half pathological") */
+	KL_COLORBAR_SMPTE_RP_198,
 };
 /**
  * @brief       Composite the string 's' of length into the colorbar at position x, y, where 0,0 is top left.
